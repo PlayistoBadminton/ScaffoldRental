@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ElevateEasy SOP</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f4f8;min-height:100vh;padding:1.5rem 1rem}
+.container{max-width:480px;margin:0 auto}
+.card{background:#fff;border-radius:16px;padding:1.5rem;border:0.5px solid #dde3ea}
+
+/* Header */
+.app-header{text-align:center;margin-bottom:1.75rem;padding-bottom:1.25rem;border-bottom:0.5px solid #eee}
+.app-logo{width:58px;height:58px;border-radius:14px;background:#1a56a0;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:28px;color:#fff}
+.app-title{font-size:20px;font-weight:600;color:#1a1a1a;margin-bottom:2px}
+.app-sub{font-size:14px;color:#888}
+
+/* Home */
+.home-label{font-size:12px;font-weight:700;color:#1a56a0;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px}
+.menu-btn{width:100%;padding:16px 18px;font-size:16px;font-weight:500;text-align:left;cursor:pointer;border-radius:12px;border:0.5px solid #d0d8e4;background:#fff;color:#1a1a1a;display:flex;align-items:center;gap:12px;margin-bottom:10px;transition:background 0.15s}
+.menu-btn:hover{background:#eef3fa}
+.menu-btn i{font-size:22px;color:#1a56a0;flex-shrink:0}
+.menu-btn .arr{margin-left:auto;font-size:18px;color:#bbb}
+.menu-btn .menu-desc{font-size:13px;color:#888;display:block;margin-top:2px;font-weight:400}
+
+/* SOP screens */
+.sop-screen{display:none}
+.sop-screen.active{display:block}
+.sop-header{font-size:15px;font-weight:500;color:#888;margin-bottom:1.25rem;display:flex;align-items:center;gap:8px;padding-bottom:1rem;border-bottom:0.5px solid #eee}
+.sop-header i{font-size:18px;color:#1a56a0}
+.sop-header .title{color:#222;font-size:16px;flex:1;font-weight:500}
+.home-link{font-size:14px;color:#1a56a0;cursor:pointer;display:flex;align-items:center;gap:4px;flex-shrink:0}
+.home-link:hover{text-decoration:underline}
+
+/* Trail */
+.trail{display:flex;flex-direction:column;gap:4px;margin-bottom:1rem}
+.trail-item{font-size:14px;color:#666;display:flex;align-items:center;gap:6px}
+.trail-item i{font-size:14px;color:#1a56a0}
+
+/* Steps */
+.step-box{display:none}
+.step-box.active{display:block}
+.step-num{font-size:12px;font-weight:700;color:#1a56a0;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px}
+.step-q{font-size:18px;font-weight:500;color:#1a1a1a;margin-bottom:1rem;line-height:1.4}
+.step-hint{font-size:14px;color:#888;margin-bottom:1rem;line-height:1.5}
+.btn-row{display:flex;flex-direction:column;gap:10px;margin-bottom:8px}
+.bar-btn{width:100%;padding:15px 18px;font-size:15px;font-weight:500;text-align:left;cursor:pointer;border-radius:10px;border:0.5px solid #d0d8e4;background:#fff;color:#1a1a1a;display:flex;align-items:center;gap:12px;transition:background 0.15s}
+.bar-btn:hover{background:#eef3fa}
+.bar-btn.selected{background:#deeaf8;border-color:#1a56a0;color:#0d3a70}
+.bar-btn i{font-size:20px;color:#1a56a0;flex-shrink:0}
+.bar-btn .btn-sub{font-size:13px;color:#888;display:block;font-weight:400;margin-top:2px}
+.back-wrap{display:flex;justify-content:flex-end;margin-top:4px}
+.back-btn{padding:10px 18px;font-size:14px;cursor:pointer;border-radius:10px;border:0.5px solid #ddd;background:transparent;color:#888;display:inline-flex;align-items:center;gap:6px}
+.back-btn:hover{background:#eef3fa}
+.back-btn i{font-size:16px}
+
+/* Rate card result */
+.rate-box{background:#deeaf8;border-radius:12px;padding:1.5rem;display:none}
+.rate-box.active{display:block}
+.rate-label{font-size:14px;color:#1a56a0;margin-bottom:4px;font-weight:500}
+.rate-height{font-size:13px;color:#4a7ab5;margin-bottom:1rem}
+.rate-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1.25rem}
+.rate-row{background:#fff;border-radius:8px;padding:12px;border:0.5px solid #c0d4ee}
+.rate-row.highlight{background:#1a56a0;border-color:#1a56a0}
+.rate-row .days{font-size:12px;color:#888;margin-bottom:2px}
+.rate-row.highlight .days{color:#9ec4f0}
+.rate-row .amt{font-size:20px;font-weight:600;color:#1a1a1a}
+.rate-row.highlight .amt{color:#fff}
+.rate-row .per{font-size:12px;color:#888}
+.rate-row.highlight .per{color:#9ec4f0}
+.rate-note{font-size:13px;color:#4a7ab5;margin-bottom:1.25rem;line-height:1.5;background:#c8dff5;border-radius:8px;padding:10px 12px}
+.rate-note i{color:#1a56a0;margin-right:4px}
+.restart-btn{padding:12px 22px;font-size:14px;font-weight:500;cursor:pointer;border-radius:10px;border:0.5px solid #1a56a0;background:transparent;color:#1a56a0;display:inline-flex;align-items:center;gap:6px}
+.restart-btn:hover{background:#c8dff5}
+
+/* Done box */
+.done-box{background:#e8f5e9;border-radius:12px;padding:1.5rem;display:none}
+.done-box.active{display:block}
+.done-box i.big{font-size:40px;color:#2e7d32;margin-bottom:10px;display:block}
+.done-title{font-size:18px;font-weight:600;color:#1b5e20;margin-bottom:6px}
+.done-sub{font-size:14px;color:#388e3c;margin-bottom:1.25rem;line-height:1.6}
+.done-sub li{margin-left:1rem;margin-bottom:4px}
+
+/* Warning box */
+.warn-box{background:#fff8e1;border-radius:12px;padding:1.25rem;display:none}
+.warn-box.active{display:block}
+.warn-box i.big{font-size:32px;color:#f57f17;margin-bottom:8px;display:block}
+.warn-title{font-size:16px;font-weight:600;color:#e65100;margin-bottom:4px}
+.warn-sub{font-size:14px;color:#bf360c;margin-bottom:1rem;line-height:1.6}
+.warn-sub li{margin-left:1rem;margin-bottom:4px}
+
+/* Checklist */
+.checklist{display:flex;flex-direction:column;gap:8px;margin-bottom:1.25rem}
+.chk-item{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-radius:9px;border:0.5px solid #d0d8e4;background:#f8fafc;cursor:pointer;transition:background 0.15s}
+.chk-item.checked{background:#e8f5e9;border-color:#66bb6a}
+.chk-item i.chk-icon{font-size:20px;color:#ccc;flex-shrink:0;margin-top:1px;transition:color 0.15s}
+.chk-item.checked i.chk-icon{color:#43a047}
+.chk-item .chk-text{font-size:14px;color:#333;line-height:1.5}
+.chk-item.checked .chk-text{color:#2e7d32}
+.chk-progress{font-size:13px;color:#888;margin-bottom:8px}
+.chk-progress span{font-weight:600;color:#1a56a0}
+
+@media(max-width:480px){
+  body{padding:1rem 0.75rem}
+  .card{padding:1.25rem}
+  .app-logo{width:64px;height:64px;font-size:32px}
+  .app-title{font-size:22px}
+  .menu-btn{font-size:17px;padding:17px 18px}
+  .step-q{font-size:20px}
+  .bar-btn{font-size:16px;padding:16px 18px}
+  .rate-row .amt{font-size:22px}
+}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="card">
+
+  <div class="app-header">
+    <div class="app-logo"><i class="ti ti-building-scaffold"></i></div>
+    <div class="app-title">ElevateEasy SOP</div>
+    <div class="app-sub">Staff operations guide · Hubli</div>
+  </div>
+
+  <!-- HOME -->
+  <div id="home">
+    <div class="home-label">Select a workflow</div>
+    <button class="menu-btn" onclick="openSOP('sop_enquiry')">
+      <i class="ti ti-phone-call"></i>
+      <span>New rental enquiry<span class="menu-desc">Quote & booking — phone / walk-in</span></span>
+      <i class="ti ti-chevron-right arr"></i>
+    </button>
+    <button class="menu-btn" onclick="openSOP('sop_prearrival')">
+      <i class="ti ti-info-circle"></i>
+      <span>Pre-arrival information to customer<span class="menu-desc">What to confirm with customer before delivery</span></span>
+      <i class="ti ti-chevron-right arr"></i>
+    </button>
+    <button class="menu-btn" onclick="openSOP('sop_delivery')">
+      <i class="ti ti-truck-delivery"></i>
+      <span>Delivery & setup checklist<span class="menu-desc">Before leaving site after setup</span></span>
+      <i class="ti ti-chevron-right arr"></i>
+    </button>
+    <button class="menu-btn" onclick="openSOP('sop_return')">
+      <i class="ti ti-arrow-back-up"></i>
+      <span>Dismantling & return checklist<span class="menu-desc">Equipment collection & condition check</span></span>
+      <i class="ti ti-chevron-right arr"></i>
+    </button>
+    <button class="menu-btn" onclick="openSOP('sop_damage')">
+      <i class="ti ti-alert-triangle"></i>
+      <span>Damage / safety incident<span class="menu-desc">What to do if something goes wrong</span></span>
+      <i class="ti ti-chevron-right arr"></i>
+    </button>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       SOP 1 — NEW RENTAL ENQUIRY
+  ══════════════════════════════════════ -->
+  <div class="sop-screen" id="sop_enquiry">
+    <div class="sop-header">
+      <i class="ti ti-phone-call"></i>
+      <span class="title">New rental enquiry</span>
+      <span class="home-link" onclick="goHome('sop_enquiry')"><i class="ti ti-home"></i> Home</span>
+    </div>
+    <div class="trail" id="trail_e"></div>
+
+    <!-- E-S1: Height -->
+    <div class="step-box active" id="e_s1">
+      <div class="step-num">Step 1 of 3</div>
+      <div class="step-q">How many levels does the customer need?</div>
+      <div class="btn-row">
+        <button class="bar-btn" onclick="pick('e','e_s1','2-level scaffold (18 ft working height)','e_s2')">
+          <i class="ti ti-stack-2"></i>
+          <span>2 levels — 18 ft working height<span class="btn-sub">Suitable for single-storey construction</span></span>
+        </button>
+        <button class="bar-btn" onclick="pick('e','e_s1','3-level scaffold (25 ft working height)','e_s2_3lvl')">
+          <i class="ti ti-stack-3"></i>
+          <span>3 levels — 25 ft working height<span class="btn-sub">Suitable for double-storey construction</span></span>
+        </button>
+        <button class="bar-btn" onclick="pick('e','e_s1','4-level scaffold (32 ft working height)','e_s2_4lvl')">
+          <i class="ti ti-stack"></i>
+          <span>4 levels — 32 ft working height<span class="btn-sub">Suitable for high-rise / commercial work</span></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- E-S2: Duration (2-level) -->
+    <div class="step-box" id="e_s2">
+      <div class="step-num">Step 2 of 3</div>
+      <div class="step-q">How many days does the customer need it?</div>
+      <div class="btn-row">
+        <button class="bar-btn" onclick="pick('e','e_s2','1 or 2 days','e_rate_2lvl_1_2d')"><i class="ti ti-calendar-event"></i> 1 or 2 days</button>
+        <button class="bar-btn" onclick="pick('e','e_s2','3 to 6 days','e_rate_2lvl_3_6d')"><i class="ti ti-calendar-week"></i> 3 to 6 days</button>
+        <button class="bar-btn" onclick="pick('e','e_s2','Exactly 7 days','e_rate_2lvl_7d')"><i class="ti ti-calendar-stats"></i> Exactly 7 days</button>
+        <button class="bar-btn" onclick="pick('e','e_s2','More than 7 days','e_rate_2lvl_7dplus')"><i class="ti ti-calendar-plus"></i> More than 7 days</button>
+      </div>
+      <div class="back-wrap"><button class="back-btn" onclick="goBack('e','e_s2','e_s1')"><i class="ti ti-arrow-left"></i> Back</button></div>
+    </div>
+
+    <!-- E-S2: Duration (3-level) -->
+    <div class="step-box" id="e_s2_3lvl">
+      <div class="step-num">Step 2 of 3</div>
+      <div class="step-q">How many days does the customer need it?</div>
+      <div class="btn-row">
+        <button class="bar-btn" onclick="pick('e','e_s2_3lvl','1 or 2 days','e_rate_3lvl_1_2d')"><i class="ti ti-calendar-event"></i> 1 or 2 days</button>
+        <button class="bar-btn" onclick="pick('e','e_s2_3lvl','3 to 6 days','e_rate_3lvl_3_6d')"><i class="ti ti-calendar-week"></i> 3 to 6 days</button>
+        <button class="bar-btn" onclick="pick('e','e_s2_3lvl','7 or more days','e_rate_3lvl_7dplus')"><i class="ti ti-calendar-plus"></i> 7 or more days</button>
+      </div>
+      <div class="back-wrap"><button class="back-btn" onclick="goBack('e','e_s2_3lvl','e_s1')"><i class="ti ti-arrow-left"></i> Back</button></div>
+    </div>
+
+    <!-- ── RATE CARDS: 2-LEVEL ── -->
+
+    <div class="rate-box" id="e_rate_2lvl_1_2d">
+      <div class="rate-label">2-level stair scaffold</div>
+      <div class="rate-height"><i class="ti ti-ruler-measure"></i> Working height: 18 feet</div>
+      <div class="rate-grid">
+        <div class="rate-row highlight">
+          <div class="days">1–2 days</div>
+          <div class="amt">₹1,200</div>
+          <div class="per">per day</div>
+        </div>
+        <div class="rate-row">
+          <div class="days">3–6 days</div>
+          <div class="amt">₹1,000</div>
+          <div class="per">per day</div>
+        </div>
+        <div class="rate-row">
+          <div class="days">7 days</div>
+          <div class="amt">₹900</div>
+          <div class="per">per day</div>
+        </div>
+        <div class="rate-row">
+          <div class="days">7+ days</div>
+          <div class="amt">₹800</div>
+          <div class="per">per day</div>
+        </div>
+      </div>
+      <div class="rate-note"><i class="ti ti-info-circle"></i> Collect customer name, site address & phone. Confirm delivery date. Inform that security deposit is required — call owner to finalise amount.</div>
+      <button class="restart-btn" onclick="restartSOP('e','sop_enquiry')"><i class="ti ti-refresh"></i> New enquiry</button>
+      <div class="back-wrap" style="justify-content:center;margin-top:10px"><button class="back-btn" onclick="goBack('e','e_rate_2lvl_1_2d','e_s2')"><i class="ti ti-arrow-left"></i> Back</button></div>
+    </div>
+
+    <div class="rate-box" id="e_rate_2lvl_3_6d">
+      <div class="rate-label">2-level stair scaffold</div>
+      <div class="rate-height"><i class="ti ti-ruler-measure"></i> Working height: 18 feet</div>
+      <div class="rate-grid">
+        <div class="rate-row">
+          <div class="days">1–2 days</div>
+          <div class="amt">₹1,200</div>
+          <div class="per">per day</div>
+        </div>
+        <div class="rate-row highlight">
+          <div class="days">3–6 days</div>
+          <div class="amt">₹1,000</div>
+          <div class="per">per day</div>
+        </div>
+        <div class="rate-row">
+          <div class="days">7 days</div>
+          <div class="amt">₹900</div>
+          <div class="per">per day</div>
+        </div>
+        <div class="rate-row">
+          <div class="days">7+ days</div>
+          <div class="amt">₹800</div>
+          <div class="per">per day</div>
+        </div>
+      </div>
+      <div class="rate-note"><i class="ti ti-info-circle"></i> Collect customer name, site address & phone. Confirm delivery date. Inform that security deposit is required — call owner to finalise amount.</div>
+      <button class="restart-btn" onclick="restartSOP('e','sop_enquiry')"><i class="ti ti-refresh"></i> New enquiry</button>
+      <div class="back-wrap" style="justify-content:center;margin-top:10px"><button class="back-btn" onclick="goBack('e','e_rate_2lvl_3_6d','e_s2')"><i class="ti ti-arrow-left"></i> Back</button></div>
+    </div>
+
+    <div class="rate-box" id="e_rate_2lvl_7d">
+      <div class="rate-label">2-level stair scaffold</div>
+      <div class="rate-height"><i class="ti ti-ruler-measure"></i> Working height: 18 feet</div>
+      <div class="rate-grid">
+        <div class="rate-row">
+          <div class="days">1–2 days</div>
+          <div class="amt">₹1,200</div>
+          <div class="per">per day</div>
+        </div>
+        <div class="rate-row">
+          <div class="days">3–6 days</div>
+          <div class="amt">₹1,000</div>
+          <div class="per">per day</div>
+        </div>
+        <div class="rate-row highlight">
+          <div class="days">7 days</div>
+          <div class="amt">₹900</div>
+          <div class="per">per day</div>
+        </div>
+        <div class="rate-row">
+          <div class="days">7+ days</div>
+          <div class="amt">₹800</div>
+          <div class="per">per day</div>
+        </div>
+      </div>
+      <div class="rate-note"><i class="ti ti-info-circle"></i> Collect customer name, site address & phone. Confirm delivery date. Inform that security deposit is required — call owner to finalise amount.</div>
+      <button class="restart-btn" onclick="restartSOP('e','sop_enquiry')"><i class="ti ti-refresh"></i> New enquiry</button>
+      <div class="back-wrap" style="justify-content:center;margin-top:10px"><button class="back-btn" onclick="goBack('e','e_rate_2lvl_7d','e_s2')"><i class="ti ti-arrow-left"></i> Back</button></div>
+    </div>
+
+    <div class="rate-box" id="e_rate_2lvl_7dplus">
+      <div class="rate-label">2-level stair scaffold</div>
+      <div class="rate-height"><i class="ti ti-ruler-measure"></i> Working height: 18 feet</div>
+      <div class="rate-grid">
+        <div class="rate-row">
+          <div class="days">1–2 days</div>
+          <div class="amt">₹1,200</div>
+          <div class="per">per day</div>
+        </div>
+        <div class="rate-row">
+          <div class="days">3–6 days</div>
+          <div class="amt">₹1,000</div>
+          <div class="per">per day</div>
+        </div>
+        <div class="rate-row">
+          <div class="days">7 days</div>
+          <div class="amt">₹900</div>
+          <div class="per">per day</div>
+        </div>
+        <div class="rate-row highlight">
+          <div class="days">7+ days</div>
+          <div class="amt">₹800</div>
+          <div class="per">per day</div>
+        </div>
+      </div>
+      <div class="rate-note"><i class="ti ti-info-circle"></i> Collect customer name, site address & phone. Confirm delivery date. Inform that security deposit is required — call owner to finalise amount.</div>
+      <button class="restart-btn" onclick="restartSOP('e','sop_enquiry')"><i class="ti ti-refresh"></i> New enquiry</button>
+      <div class="back-wrap" style="justify-content:center;margin-top:10px"><button class="back-btn" onclick="goBack('e','e_rate_2lvl_7dplus','e_s2')"><i class="ti ti-arrow-left"></i> Back</button></div>
+    </div>
+
+    <!-- ── RATE CARDS: 3-LEVEL ── -->
+
+    <div class="rate-box" id="e_rate_3lvl_1_2d">
+      <div class="rate-label">3-level stair scaffold</div>
+      <div class="rate-height"><i class="ti ti-ruler-measure"></i> Working height: 25 feet</div>
+      <div class="rate-grid">
+        <div class="rate-row highlight">
+          <div class="days">1–2 days</div>
+          <div class="amt">₹2,000</div>
+          <div class="per">per day</div>
+        </div>
+        <div class="rate-row">
+          <div class="days">3–6 days</div>
+          <div class="amt">₹1,800</div>
+          <div class="per">per day</div>
+        </div>
+        <div class="rate-row">
+          <div class="days">7+ days</div>
+          <div class="amt">₹1,600</div>
+          <div class="per">per day</div>
+        </div>
+      </div>
+      <div class="rate-note"><i class="ti ti-info-circle"></i> Collect customer name, site address & phone. Confirm delivery date. Inform that security deposit is required — call owner to finalise amount.</div>
+      <button class="restart-btn" onclick="restartSOP('e','sop_enquiry')"><i class="ti ti-refresh"></i> New enquiry</button>
+      <div class="back-wrap" style="justify-content:center;margin-top:10px"><button class="back-btn" onclick="goBack('e','e_rate_3lvl_1_2d','e_s2_3lvl')"><i class="ti ti-arrow-left"></i> Back</button></div>
+    </div>
+
+    <div class="rate-box" id="e_rate_3lvl_3_6d">
+      <div class="rate-label">3-level stair scaffold</div>
+      <div class="rate-height"><i class="ti ti-ruler-measure"></i> Working height: 25 feet</div>
+      <div class="rate-grid">
+        <div class="rate-row">
+          <div class="days">1–2 days</div>
+          <div class="amt">₹2,000</div>
+          <div class="per">per day</div>
+        </div>
+        <div class="rate-row highlight">
+          <div class="days">3–6 days</div>
+          <div class="amt">₹1,800</div>
+          <div class="per">per day</div>
+        </div>
+        <div class="rate-row">
+          <div class="days">7+ days</div>
+          <div class="amt">₹1,600</div>
+          <div class="per">per day</div>
+        </div>
+      </div>
+      <div class="rate-note"><i class="ti ti-info-circle"></i> Collect customer name, site address & phone. Confirm delivery date. Inform that security deposit is required — call owner to finalise amount.</div>
+      <button class="restart-btn" onclick="restartSOP('e','sop_enquiry')"><i class="ti ti-refresh"></i> New enquiry</button>
+      <div class="back-wrap" style="justify-content:center;margin-top:10px"><button class="back-btn" onclick="goBack('e','e_rate_3lvl_3_6d','e_s2_3lvl')"><i class="ti ti-arrow-left"></i> Back</button></div>
+    </div>
+
+    <div class="rate-box" id="e_rate_3lvl_7dplus">
+      <div class="rate-label">3-level stair scaffold</div>
+      <div class="rate-height"><i class="ti ti-ruler-measure"></i> Working height: 25 feet</div>
+      <div class="rate-grid">
+        <div class="rate-row">
+          <div class="days">1–2 days</div>
+          <div class="amt">₹2,000</div>
+          <div class="per">per day</div>
+        </div>
+        <div class="rate-row">
+          <div class="days">3–6 days</div>
+          <div class="amt">₹1,800</div>
+          <div class="per">per day</div>
+        </div>
+        <div class="rate-row highlight">
+          <div class="days">7+ days</div>
+          <div class="amt">₹1,600</div>
+          <div class="per">per day</div>
+        </div>
+      </div>
+      <div class="rate-note"><i class="ti ti-info-circle"></i> Collect customer name, site address & phone. Confirm delivery date. Inform that security deposit is required — call owner to finalise amount.</div>
+      <button class="restart-btn" onclick="restartSOP('e','sop_enquiry')"><i class="ti ti-refresh"></i> New enquiry</button>
+      <div class="back-wrap" style="justify-content:center;margin-top:10px"><button class="back-btn" onclick="goBack('e','e_rate_3lvl_7dplus','e_s2_3lvl')"><i class="ti ti-arrow-left"></i> Back</button></div>
+    </div>
+
+    <!-- E-S2: Duration (4-level) -->
+    <div class="step-box" id="e_s2_4lvl">
+      <div class="step-num">Step 2 of 3</div>
+      <div class="step-q">How many days does the customer need it?</div>
+      <div class="btn-row">
+        <button class="bar-btn" onclick="pick('e','e_s2_4lvl','1 or 2 days','e_rate_4lvl_1_2d')"><i class="ti ti-calendar-event"></i> 1 or 2 days</button>
+        <button class="bar-btn" onclick="pick('e','e_s2_4lvl','3 to 6 days','e_rate_4lvl_3_6d')"><i class="ti ti-calendar-week"></i> 3 to 6 days</button>
+        <button class="bar-btn" onclick="pick('e','e_s2_4lvl','7 to 10 days','e_rate_4lvl_7_10d')"><i class="ti ti-calendar-stats"></i> 7 to 10 days</button>
+        <button class="bar-btn" onclick="pick('e','e_s2_4lvl','10 to 15 days','e_rate_4lvl_10_15d')"><i class="ti ti-calendar-plus"></i> 10 to 15 days</button>
+        <button class="bar-btn" onclick="pick('e','e_s2_4lvl','15 to 25 days','e_rate_4lvl_15_25d')"><i class="ti ti-calendar-month"></i> 15 to 25 days</button>
+        <button class="bar-btn" onclick="pick('e','e_s2_4lvl','25 to 30 days','e_rate_4lvl_25_30d')"><i class="ti ti-calendar-time"></i> 25 to 30 days</button>
+      </div>
+      <div class="back-wrap"><button class="back-btn" onclick="goBack('e','e_s2_4lvl','e_s1')"><i class="ti ti-arrow-left"></i> Back</button></div>
+    </div>
+
+    <!-- ── RATE CARDS: 4-LEVEL ── -->
+
+    <!-- Rate card helper: all 6 tiers shown, selected one highlighted -->
+    <div class="rate-box" id="e_rate_4lvl_1_2d">
+      <div class="rate-label">4-level stair scaffold</div>
+      <div class="rate-height"><i class="ti ti-ruler-measure"></i> Working height: 32 feet</div>
+      <div class="rate-grid" style="grid-template-columns:1fr 1fr 1fr">
+        <div class="rate-row highlight"><div class="days">1–2 days</div><div class="amt">₹2,500</div><div class="per">per day</div></div>
+        <div class="rate-row"><div class="days">3–6 days</div><div class="amt">₹2,300</div><div class="per">per day</div></div>
+        <div class="rate-row"><div class="days">7–10 days</div><div class="amt">₹2,200</div><div class="per">per day</div></div>
+        <div class="rate-row"><div class="days">10–15 days</div><div class="amt">₹2,100</div><div class="per">per day</div></div>
+        <div class="rate-row"><div class="days">15–25 days</div><div class="amt">₹2,000</div><div class="per">per day</div></div>
+        <div class="rate-row"><div class="days">25–30 days</div><div class="amt">₹1,900</div><div class="per">per day</div></div>
+      </div>
+      <div class="rate-note"><i class="ti ti-info-circle"></i> Collect customer name, site address & phone. Confirm delivery date. Inform that security deposit is required — call owner to finalise amount.</div>
+      <button class="restart-btn" onclick="restartSOP('e','sop_enquiry')"><i class="ti ti-refresh"></i> New enquiry</button>
+      <div class="back-wrap" style="justify-content:center;margin-top:10px"><button class="back-btn" onclick="goBack('e','e_rate_4lvl_1_2d','e_s2_4lvl')"><i class="ti ti-arrow-left"></i> Back</button></div>
+    </div>
+
+    <div class="rate-box" id="e_rate_4lvl_3_6d">
+      <div class="rate-label">4-level stair scaffold</div>
+      <div class="rate-height"><i class="ti ti-ruler-measure"></i> Working height: 32 feet</div>
+      <div class="rate-grid" style="grid-template-columns:1fr 1fr 1fr">
+        <div class="rate-row"><div class="days">1–2 days</div><div class="amt">₹2,500</div><div class="per">per day</div></div>
+        <div class="rate-row highlight"><div class="days">3–6 days</div><div class="amt">₹2,300</div><div class="per">per day</div></div>
+        <div class="rate-row"><div class="days">7–10 days</div><div class="amt">₹2,200</div><div class="per">per day</div></div>
+        <div class="rate-row"><div class="days">10–15 days</div><div class="amt">₹2,100</div><div class="per">per day</div></div>
+        <div class="rate-row"><div class="days">15–25 days</div><div class="amt">₹2,000</div><div class="per">per day</div></div>
+        <div class="rate-row"><div class="days">25–30 days</div><div class="amt">₹1,900</div><div class="per">per day</div></div>
+      </div>
+      <div class="rate-note"><i class="ti ti-info-circle"></i> Collect customer name, site address & phone. Confirm delivery date. Inform that security deposit is required — call owner to finalise amount.</div>
+      <button class="restart-btn" onclick="restartSOP('e','sop_enquiry')"><i class="ti ti-refresh"></i> New enquiry</button>
+      <div class="back-wrap" style="justify-content:center;margin-top:10px"><button class="back-btn" onclick="goBack('e','e_rate_4lvl_3_6d','e_s2_4lvl')"><i class="ti ti-arrow-left"></i> Back</button></div>
+    </div>
+
+    <div class="rate-box" id="e_rate_4lvl_7_10d">
+      <div class="rate-label">4-level stair scaffold</div>
+      <div class="rate-height"><i class="ti ti-ruler-measure"></i> Working height: 32 feet</div>
+      <div class="rate-grid" style="grid-template-columns:1fr 1fr 1fr">
+        <div class="rate-row"><div class="days">1–2 days</div><div class="amt">₹2,500</div><div class="per">per day</div></div>
+        <div class="rate-row"><div class="days">3–6 days</div><div class="amt">₹2,300</div><div class="per">per day</div></div>
+        <div class="rate-row highlight"><div class="days">7–10 days</div><div class="amt">₹2,200</div><div class="per">per day</div></div>
+        <div class="rate-row"><div class="days">10–15 days</div><div class="amt">₹2,100</div><div class="per">per day</div></div>
+        <div class="rate-row"><div class="days">15–25 days</div><div class="amt">₹2,000</div><div class="per">per day</div></div>
+        <div class="rate-row"><div class="days">25–30 days</div><div class="amt">₹1,900</div><div class="per">per day</div></div>
+      </div>
+      <div class="rate-note"><i class="ti ti-info-circle"></i> Collect customer name, site address & phone. Confirm delivery date. Inform that security deposit is required — call owner to finalise amount.</div>
+      <button class="restart-btn" onclick="restartSOP('e','sop_enquiry')"><i class="ti ti-refresh"></i> New enquiry</button>
+      <div class="back-wrap" style="justify-content:center;margin-top:10px"><button class="back-btn" onclick="goBack('e','e_rate_4lvl_7_10d','e_s2_4lvl')"><i class="ti ti-arrow-left"></i> Back</button></div>
+    </div>
+
+    <div class="rate-box" id="e_rate_4lvl_10_15d">
+      <div class="rate-label">4-level stair scaffold</div>
+      <div class="rate-height"><i class="ti ti-ruler-measure"></i> Working height: 32 feet</div>
+      <div class="rate-grid" style="grid-template-columns:1fr 1fr 1fr">
+        <div class="rate-row"><div class="days">1–2 days</div><div class="amt">₹2,500</div><div class="per">per day</div></div>
+        <div class="rate-row"><div class="days">3–6 days</div><div class="amt">₹2,300</div><div class="per">per day</div></div>
+        <div class="rate-row"><div class="days">7–10 days</div><div class="amt">₹2,200</div><div class="per">per day</div></div>
+        <div class="rate-row highlight"><div class="days">10–15 days</div><div class="amt">₹2,100</div><div class="per">per day</div></div>
+        <div class="rate-row"><div class="days">15–25 days</div><div class="amt">₹2,000</div><div class="per">per day</div></div>
+        <div class="rate-row"><div class="days">25–30 days</div><div class="amt">₹1,900</div><div class="per">per day</div></div>
+      </div>
+      <div class="rate-note"><i class="ti ti-info-circle"></i> Collect customer name, site address & phone. Confirm delivery date. Inform that security deposit is required — call owner to finalise amount.</div>
+      <button class="restart-btn" onclick="restartSOP('e','sop_enquiry')"><i class="ti ti-refresh"></i> New enquiry</button>
+      <div class="back-wrap" style="justify-content:center;margin-top:10px"><button class="back-btn" onclick="goBack('e','e_rate_4lvl_10_15d','e_s2_4lvl')"><i class="ti ti-arrow-left"></i> Back</button></div>
+    </div>
+
+    <div class="rate-box" id="e_rate_4lvl_15_25d">
+      <div class="rate-label">4-level stair scaffold</div>
+      <div class="rate-height"><i class="ti ti-ruler-measure"></i> Working height: 32 feet</div>
+      <div class="rate-grid" style="grid-template-columns:1fr 1fr 1fr">
+        <div class="rate-row"><div class="days">1–2 days</div><div class="amt">₹2,500</div><div class="per">per day</div></div>
+        <div class="rate-row"><div class="days">3–6 days</div><div class="amt">₹2,300</div><div class="per">per day</div></div>
+        <div class="rate-row"><div class="days">7–10 days</div><div class="amt">₹2,200</div><div class="per">per day</div></div>
+        <div class="rate-row"><div class="days">10–15 days</div><div class="amt">₹2,100</div><div class="per">per day</div></div>
+        <div class="rate-row highlight"><div class="days">15–25 days</div><div class="amt">₹2,000</div><div class="per">per day</div></div>
+        <div class="rate-row"><div class="days">25–30 days</div><div class="amt">₹1,900</div><div class="per">per day</div></div>
+      </div>
+      <div class="rate-note"><i class="ti ti-info-circle"></i> Collect customer name, site address & phone. Confirm delivery date. Inform that security deposit is required — call owner to finalise amount.</div>
+      <button class="restart-btn" onclick="restartSOP('e','sop_enquiry')"><i class="ti ti-refresh"></i> New enquiry</button>
+      <div class="back-wrap" style="justify-content:center;margin-top:10px"><button class="back-btn" onclick="goBack('e','e_rate_4lvl_15_25d','e_s2_4lvl')"><i class="ti ti-arrow-left"></i> Back</button></div>
+    </div>
+
+    <div class="rate-box" id="e_rate_4lvl_25_30d">
+      <div class="rate-label">4-level stair scaffold</div>
+      <div class="rate-height"><i class="ti ti-ruler-measure"></i> Working height: 32 feet</div>
+      <div class="rate-grid" style="grid-template-columns:1fr 1fr 1fr">
+        <div class="rate-row"><div class="days">1–2 days</div><div class="amt">₹2,500</div><div class="per">per day</div></div>
+        <div class="rate-row"><div class="days">3–6 days</div><div class="amt">₹2,300</div><div class="per">per day</div></div>
+        <div class="rate-row"><div class="days">7–10 days</div><div class="amt">₹2,200</div><div class="per">per day</div></div>
+        <div class="rate-row"><div class="days">10–15 days</div><div class="amt">₹2,100</div><div class="per">per day</div></div>
+        <div class="rate-row"><div class="days">15–25 days</div><div class="amt">₹2,000</div><div class="per">per day</div></div>
+        <div class="rate-row highlight"><div class="days">25–30 days</div><div class="amt">₹1,900</div><div class="per">per day</div></div>
+      </div>
+      <div class="rate-note"><i class="ti ti-info-circle"></i> Collect customer name, site address & phone. Confirm delivery date. Inform that security deposit is required — call owner to finalise amount.</div>
+      <button class="restart-btn" onclick="restartSOP('e','sop_enquiry')"><i class="ti ti-refresh"></i> New enquiry</button>
+      <div class="back-wrap" style="justify-content:center;margin-top:10px"><button class="back-btn" onclick="goBack('e','e_rate_4lvl_25_30d','e_s2_4lvl')"><i class="ti ti-arrow-left"></i> Back</button></div>
+    </div>
+
+  </div><!-- /sop_enquiry -->
+
+  <!-- ══════════════════════════════════════
+       SOP 1B — PRE-ARRIVAL INFORMATION
+  ══════════════════════════════════════ -->
+  <div class="sop-screen" id="sop_prearrival">
+    <div class="sop-header">
+      <i class="ti ti-info-circle"></i>
+      <span class="title">Pre-arrival information to customer</span>
+      <span class="home-link" onclick="goHome('sop_prearrival')"><i class="ti ti-home"></i> Home</span>
+    </div>
+
+    <div class="step-box active" id="pa_chk">
+      <div class="step-num"></div>
+      <div class="step-q">Confirm all points with customer before their arrival</div>
+      <div class="chk-progress">Confirmed: <span id="pa_count">0</span> / 5</div>
+      <div class="checklist">
+        <div class="chk-item" onclick="toggleChk(this,'pa')"><i class="ti ti-square chk-icon"></i><span class="chk-text">Assistants required from your end to help load and unload parts to/from the vehicle</span></div>
+        <div class="chk-item" onclick="toggleChk(this,'pa')"><i class="ti ti-square chk-icon"></i><span class="chk-text">Assistants required while assembling the unit — our staff will guide the assembly</span></div>
+        <div class="chk-item" onclick="toggleChk(this,'pa')"><i class="ti ti-square chk-icon"></i><span class="chk-text">Plain, level ground required at site — no slope</span></div>
+        <div class="chk-item" onclick="toggleChk(this,'pa')"><i class="ti ti-square chk-icon"></i><span class="chk-text">Security deposit (₹10,000 or more) and Aadhaar card copy will be collected before parts are loaded to the vehicle</span></div>
+        <div class="chk-item" onclick="toggleChk(this,'pa')"><i class="ti ti-square chk-icon"></i><span class="chk-text">Fill the customer form</span></div>
+      </div>
+      <button class="restart-btn" onclick="resetChk('pa_chk','pa_count',5)"><i class="ti ti-refresh"></i> Reset</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       SOP 2 — DELIVERY & SETUP
+  ══════════════════════════════════════ -->
+  <div class="sop-screen" id="sop_delivery">
+    <div class="sop-header">
+      <i class="ti ti-truck-delivery"></i>
+      <span class="title">Delivery & setup checklist</span>
+      <span class="home-link" onclick="goHome('sop_delivery')"><i class="ti ti-home"></i> Home</span>
+    </div>
+
+    <div class="step-box active" id="d_chk">
+      <div class="step-num">Before leaving the site</div>
+      <div class="step-q">Complete all checks before you leave</div>
+      <div class="chk-progress">Completed: <span id="d_count">0</span> / 8</div>
+      <div class="checklist">
+        <div class="chk-item" onclick="toggleChk(this,'d')"><i class="ti ti-square chk-icon"></i><span class="chk-text">All scaffold components delivered — count matches booking</span></div>
+        <div class="chk-item" onclick="toggleChk(this,'d')"><i class="ti ti-square chk-icon"></i><span class="chk-text">Tower assembled on firm, level ground</span></div>
+        <div class="chk-item" onclick="toggleChk(this,'d')"><i class="ti ti-square chk-icon"></i><span class="chk-text">All wheel locks engaged (if mobile tower)</span></div>
+        <div class="chk-item" onclick="toggleChk(this,'d')"><i class="ti ti-square chk-icon"></i><span class="chk-text">All locking pins and couplers tightened</span></div>
+        <div class="chk-item" onclick="toggleChk(this,'d')"><i class="ti ti-square chk-icon"></i><span class="chk-text">Working platform boards fully seated and secure</span></div>
+        <div class="chk-item" onclick="toggleChk(this,'d')"><i class="ti ti-square chk-icon"></i><span class="chk-text">Safety rails fitted on all open sides of platform</span></div>
+        <div class="chk-item" onclick="toggleChk(this,'d')"><i class="ti ti-square chk-icon"></i><span class="chk-text">Customer shown how to use the scaffold safely — do not move while someone is on it</span></div>
+        <div class="chk-item" onclick="toggleChk(this,'d')"><i class="ti ti-square chk-icon"></i><span class="chk-text">Customer has signed rental agreement / acknowledged return date</span></div>
+      </div>
+      <button class="restart-btn" onclick="resetChk('d_chk','d_count',8)"><i class="ti ti-refresh"></i> Reset checklist</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       SOP 3 — DISMANTLING & RETURN
+  ══════════════════════════════════════ -->
+  <div class="sop-screen" id="sop_return">
+    <div class="sop-header">
+      <i class="ti ti-arrow-back-up"></i>
+      <span class="title">Dismantling & return</span>
+      <span class="home-link" onclick="goHome('sop_return')"><i class="ti ti-home"></i> Home</span>
+    </div>
+
+    <div class="step-box active" id="r_s1">
+      <div class="step-num">Step 1 of 2</div>
+      <div class="step-q">Is the scaffold in good condition — no visible damage?</div>
+      <div class="btn-row">
+        <button class="bar-btn" onclick="pick('r','r_s1','No damage found','r_chk')"><i class="ti ti-circle-check"></i> No damage — proceed to collection checklist</button>
+        <button class="bar-btn" onclick="pick('r','r_s1','Damage found','r_damage_found')"><i class="ti ti-circle-x"></i> Damage found — report it</button>
+      </div>
+    </div>
+
+    <div class="step-box" id="r_damage_found">
+      <div class="warn-box active">
+        <i class="ti ti-alert-triangle big"></i>
+        <div class="warn-title">Damage found — do not ignore</div>
+        <div class="warn-sub">
+          <ul>
+            <li>Photograph all damage clearly before dismantling</li>
+            <li>Call owner immediately: do not return equipment without approval</li>
+            <li>Note which parts are damaged (frame / platform / rail / pin)</li>
+            <li>Do not accept cash from customer for damage — owner will handle</li>
+          </ul>
+        </div>
+      </div>
+      <div class="back-wrap" style="margin-top:12px"><button class="back-btn" onclick="goBack('r','r_damage_found','r_s1')"><i class="ti ti-arrow-left"></i> Back</button></div>
+    </div>
+
+    <div class="step-box" id="r_chk">
+      <div class="step-num">Step 2 of 2 — Collection checklist</div>
+      <div class="step-q">Verify all components before loading</div>
+      <div class="chk-progress">Completed: <span id="r_count">0</span> / 7</div>
+      <div class="checklist">
+        <div class="chk-item" onclick="toggleChk(this,'r')"><i class="ti ti-square chk-icon"></i><span class="chk-text">All frames / standards loaded onto vehicle</span></div>
+        <div class="chk-item" onclick="toggleChk(this,'r')"><i class="ti ti-square chk-icon"></i><span class="chk-text">All platform boards / decking collected</span></div>
+        <div class="chk-item" onclick="toggleChk(this,'r')"><i class="ti ti-square chk-icon"></i><span class="chk-text">All safety rails / guard rails collected</span></div>
+        <div class="chk-item" onclick="toggleChk(this,'r')"><i class="ti ti-square chk-icon"></i><span class="chk-text">All pins, couplers and bolts collected — nothing left on site</span></div>
+        <div class="chk-item" onclick="toggleChk(this,'r')"><i class="ti ti-square chk-icon"></i><span class="chk-text">Wheels / castors collected (if mobile tower)</span></div>
+        <div class="chk-item" onclick="toggleChk(this,'r')"><i class="ti ti-square chk-icon"></i><span class="chk-text">Component count matches original delivery list</span></div>
+        <div class="chk-item" onclick="toggleChk(this,'r')"><i class="ti ti-square chk-icon"></i><span class="chk-text">Security deposit refund status confirmed with owner before leaving customer site</span></div>
+      </div>
+      <button class="restart-btn" onclick="resetChk('r_chk','r_count',7)"><i class="ti ti-refresh"></i> Reset checklist</button>
+      <div class="back-wrap" style="margin-top:10px"><button class="back-btn" onclick="goBack('r','r_chk','r_s1')"><i class="ti ti-arrow-left"></i> Back</button></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       SOP 4 — DAMAGE / SAFETY INCIDENT
+  ══════════════════════════════════════ -->
+  <div class="sop-screen" id="sop_damage">
+    <div class="sop-header">
+      <i class="ti ti-alert-triangle"></i>
+      <span class="title">Damage / safety incident</span>
+      <span class="home-link" onclick="goHome('sop_damage')"><i class="ti ti-home"></i> Home</span>
+    </div>
+
+    <div class="step-box active" id="dm_s1">
+      <div class="step-num">What type of incident?</div>
+      <div class="step-q">Select the situation</div>
+      <div class="btn-row">
+        <button class="bar-btn" onclick="pick('dm','dm_s1','Equipment damage reported by customer','dm_equip')"><i class="ti ti-tool"></i> Equipment damaged</button>
+        <button class="bar-btn" onclick="pick('dm','dm_s1','Person injured on scaffold','dm_injury')"><i class="ti ti-first-aid-kit"></i> Person injured</button>
+        <button class="bar-btn" onclick="pick('dm','dm_s1','Scaffold collapsed or unsafe','dm_collapse')"><i class="ti ti-building-off"></i> Scaffold collapsed / unsafe</button>
+      </div>
+    </div>
+
+    <div class="step-box" id="dm_equip">
+      <div class="warn-box active">
+        <i class="ti ti-tool big"></i>
+        <div class="warn-title">Equipment damage</div>
+        <div class="warn-sub">
+          <ul>
+            <li>Ask customer to send clear photos on WhatsApp immediately</li>
+            <li>Do NOT quote any repair or deduction amount to customer</li>
+            <li>Call owner and share the photos right away</li>
+            <li>Log: customer name, date reported, description of damage</li>
+            <li>Owner will decide deduction from security deposit</li>
+          </ul>
+        </div>
+      </div>
+      <div class="back-wrap" style="margin-top:12px"><button class="back-btn" onclick="goBack('dm','dm_equip','dm_s1')"><i class="ti ti-arrow-left"></i> Back</button></div>
+    </div>
+
+    <div class="step-box" id="dm_injury">
+      <div class="warn-box active">
+        <i class="ti ti-first-aid-kit big"></i>
+        <div class="warn-title">Person injured — act immediately</div>
+        <div class="warn-sub">
+          <ul>
+            <li><strong>Step 1:</strong> Call emergency services if needed — 108 (ambulance)</li>
+            <li><strong>Step 2:</strong> Call owner immediately — share location and situation</li>
+            <li><strong>Step 3:</strong> Do not move the scaffold until owner or authority arrives</li>
+            <li><strong>Step 4:</strong> Photograph the scene — scaffold position, surroundings</li>
+            <li><strong>Step 5:</strong> Get injured person's name and contact; do not admit fault</li>
+          </ul>
+        </div>
+      </div>
+      <div class="back-wrap" style="margin-top:12px"><button class="back-btn" onclick="goBack('dm','dm_injury','dm_s1')"><i class="ti ti-arrow-left"></i> Back</button></div>
+    </div>
+
+    <div class="step-box" id="dm_collapse">
+      <div class="warn-box active">
+        <i class="ti ti-building-off big"></i>
+        <div class="warn-title">Scaffold collapsed or unsafe</div>
+        <div class="warn-sub">
+          <ul>
+            <li><strong>Step 1:</strong> Ensure no one is on or near the scaffold</li>
+            <li><strong>Step 2:</strong> Call owner immediately — do not attempt re-assembly alone</li>
+            <li><strong>Step 3:</strong> Photograph collapsed scaffold before touching anything</li>
+            <li><strong>Step 4:</strong> Cordon off the area — keep bystanders away</li>
+            <li><strong>Step 5:</strong> Wait for owner's instruction before any further action</li>
+          </ul>
+        </div>
+      </div>
+      <div class="back-wrap" style="margin-top:12px"><button class="back-btn" onclick="goBack('dm','dm_collapse','dm_s1')"><i class="ti ti-arrow-left"></i> Back</button></div>
+    </div>
+
+  </div><!-- /sop_damage -->
+
+</div><!-- /card -->
+</div><!-- /container -->
+
+<script>
+const histories = { e: [], r: [], dm: [], '4lvl': [] };
+
+function openSOP(sopId) {
+  document.getElementById('home').style.display = 'none';
+  document.getElementById(sopId).classList.add('active');
+}
+
+function goHome(sopId) {
+  const prefix = { sop_enquiry:'e', sop_prearrival:'pa', sop_delivery:'d', sop_return:'r', sop_damage:'dm' }[sopId];
+  if(prefix) restartSOP(prefix, sopId);
+  document.getElementById(sopId).classList.remove('active');
+  document.getElementById('home').style.display = 'block';
+}
+
+function pick(prefix, fromStep, label, nextId) {
+  const btn = event.currentTarget;
+  btn.classList.add('selected');
+  if(histories[prefix]) {
+    histories[prefix].push(label);
+    updateTrail(prefix);
+  }
+  setTimeout(() => {
+    document.getElementById(fromStep).classList.remove('active');
+    document.getElementById(nextId).classList.add('active');
+  }, 200);
+}
+
+function goBack(prefix, currentId, prevId) {
+  if(histories[prefix]) {
+    histories[prefix].pop();
+    updateTrail(prefix);
+  }
+  document.getElementById(currentId).classList.remove('active');
+  document.querySelectorAll('#' + prevId + ' .bar-btn').forEach(b => b.classList.remove('selected'));
+  document.getElementById(prevId).classList.add('active');
+}
+
+function updateTrail(prefix) {
+  const trailEl = document.getElementById('trail_' + prefix);
+  if(!trailEl) return;
+  trailEl.innerHTML = (histories[prefix]||[]).map(h =>
+    '<div class="trail-item"><i class="ti ti-check"></i>' + h + '</div>'
+  ).join('');
+}
+
+function restartSOP(prefix, sopId) {
+  if(histories[prefix]) histories[prefix] = [];
+  updateTrail(prefix);
+  const screen = document.getElementById(sopId);
+  screen.querySelectorAll('.step-box,.done-box,.rate-box,.warn-box,.unavail-box').forEach(el => el.classList.remove('active'));
+  screen.querySelectorAll('.bar-btn').forEach(b => b.classList.remove('selected'));
+  const firstStep = screen.querySelector('.step-box');
+  if(firstStep) firstStep.classList.add('active');
+}
+
+function toggleChk(el, prefix) {
+  el.classList.toggle('checked');
+  const icon = el.querySelector('.chk-icon');
+  if(el.classList.contains('checked')) {
+    icon.classList.remove('ti-square');
+    icon.classList.add('ti-square-check-filled');
+  } else {
+    icon.classList.remove('ti-square-check-filled');
+    icon.classList.add('ti-square');
+  }
+  // update counter
+  const container = el.closest('.step-box') || el.closest('.sop-screen');
+  const total = container.querySelectorAll('.chk-item').length;
+  const done = container.querySelectorAll('.chk-item.checked').length;
+  const counterId = prefix === 'd' ? 'd_count' : prefix === 'pa' ? 'pa_count' : 'r_count';
+  const counter = document.getElementById(counterId);
+  if(counter) counter.textContent = done;
+}
+
+function resetChk(stepId, counterId, total) {
+  const step = document.getElementById(stepId);
+  step.querySelectorAll('.chk-item').forEach(el => {
+    el.classList.remove('checked');
+    const icon = el.querySelector('.chk-icon');
+    icon.classList.remove('ti-square-check-filled');
+    icon.classList.add('ti-square');
+  });
+  const counter = document.getElementById(counterId);
+  if(counter) counter.textContent = '0';
+}
+</script>
+</body>
+</html>
